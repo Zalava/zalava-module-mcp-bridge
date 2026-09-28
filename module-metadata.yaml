@@ -1,0 +1,61 @@
+schemaVersion: 1
+modules:
+  - moduleId: zalava-module-mcp-bridge
+    version: 0.1.0-alpha.1
+    displayName: MCP Bridge
+    description: Bridges configured MCP services into SEA providers.
+    supportUrl: https://github.com/Zalava/zalava-module-mcp-bridge
+    artifact:
+      groupId: org.zalava.modules
+      artifactId: zalava-module-mcp-bridge
+      version: 0.1.0-alpha.1
+    source:
+      repository: https://github.com/Zalava/zalava-module-mcp-bridge.git
+      license: Apache-2.0
+    build:
+      command: ["./gradlew", "build"]
+      verificationCommand: ["./gradlew", "test"]
+    compatibility:
+      seaRuntime: ">=1.0.0 <2.0.0"
+    configurationSchema:
+      type: object
+      additionalProperties: false
+      properties:
+        mcp-service-factory:
+          type: object
+          additionalProperties: false
+          required: ["registrations"]
+          properties:
+            registrations:
+              type: array
+              items:
+                type: object
+                additionalProperties: false
+                required: ["id", "transport"]
+                properties:
+                  id:
+                    type: string
+                  transport:
+                    type: string
+                    enum: ["streamable-http", "stdio"]
+                  endpoint:
+                    type: string
+                  command:
+                    type: string
+                  arguments:
+                    type: array
+                    items:
+                      type: string
+                  credentialReferences:
+                    type: object
+                    additionalProperties:
+                      type: string
+    factories:
+      - factoryId: mcp-service-factory
+        providerType: mcp-service
+    services:
+      provided: []
+      required: []
+    operations: []
+    security:
+      permissions: [network-mcp]
