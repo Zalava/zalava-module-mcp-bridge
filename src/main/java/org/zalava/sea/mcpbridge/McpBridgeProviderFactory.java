@@ -3,7 +3,7 @@ package org.zalava.mcpbridge;
 import org.zalava.ProviderFactory;
 import org.zalava.ProviderFactoryContext;
 import org.zalava.ProviderFactoryDescriptor;
-import org.zalava.SeaProvider;
+import org.zalava.ZalavaProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +24,8 @@ final class McpBridgeProviderFactory implements ProviderFactory {
                 "MCP service bridge", "Creates one provider for each configured remote MCP service.");
     }
 
-    @Override public List<SeaProvider> createProviders(ProviderFactoryContext context) {
-        List<SeaProvider> providers = new ArrayList<>();
+    @Override public List<ZalavaProvider> createProviders(ProviderFactoryContext context) {
+        List<ZalavaProvider> providers = new ArrayList<>();
         for (McpRegistration registration : registrations(context.configuration())) {
             try {
                 providers.add(new McpBridgeProvider(registration, version, connector.connect(registration)));

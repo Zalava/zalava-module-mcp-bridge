@@ -14,8 +14,8 @@ import io.modelcontextprotocol.spec.McpClientTransport;
 import io.modelcontextprotocol.spec.McpSchema;
 import org.zalava.PromptDescriptor;
 import org.zalava.ResourceDescriptor;
-import org.zalava.SeaOperationResult;
-import org.zalava.SeaToolDescriptor;
+import org.zalava.ZalavaOperationResult;
+import org.zalava.ZalavaToolDescriptor;
 
 import java.util.List;
 import java.util.Map;
@@ -60,8 +60,8 @@ final class McpJavaServiceConnector implements McpServiceConnector {
         private final McpSyncClient client;
         private Session(McpSyncClient client) { this.client = client; }
 
-        @Override public List<SeaToolDescriptor> tools() {
-            return client.listTools().tools().stream().map(tool -> new SeaToolDescriptor(tool.name(), tool.description(),
+        @Override public List<ZalavaToolDescriptor> tools() {
+            return client.listTools().tools().stream().map(tool -> new ZalavaToolDescriptor(tool.name(), tool.description(),
                     tool.annotations() == null || !Boolean.TRUE.equals(tool.annotations().readOnlyHint()),
                     List.of("remote-mcp"), tool.inputSchema())).toList();
         }
@@ -71,22 +71,22 @@ final class McpJavaServiceConnector implements McpServiceConnector {
         @Override public List<PromptDescriptor> prompts() {
             return client.listPrompts().prompts().stream().map(prompt -> new PromptDescriptor(prompt.name(), prompt.description())).toList();
         }
-        @Override public SeaOperationResult callTool(String name, JsonNode arguments) {
+        @Override public ZalavaOperationResult callTool(String name, JsonNode arguments) {
             try {
                 McpSchema.CallToolResult result = client.callTool(new McpSchema.CallToolRequest(name, map(arguments)));
-                return new SeaOperationResult(!Boolean.TRUE.equals(result.isError()), result.content(), result.meta());
+                return new ZalavaOperationResult(!Boolean.TRUE.equals(result.isError()), result.content(), result.meta());
             } catch (RuntimeException exception) { return remoteFailure(); }
         }
-        @Override public SeaOperationResult readResource(String uri) {
+        @Override public ZalavaOperationResult readResource(String uri) {
             try {
                 McpSchema.ReadResourceResult result = client.readResource(new McpSchema.ReadResourceRequest(uri));
-                return new SeaOperationResult(true, result.contents(), result.meta());
+                return new ZalavaOperationResult(true, result.contents(), result.meta());
             } catch (RuntimeException exception) { return remoteFailure(); }
         }
-        @Override public SeaOperationResult resolvePrompt(String name, JsonNode arguments) {
+        @Override public ZalavaOperationResult resolvePrompt(String name, JsonNode arguments) {
             try {
                 McpSchema.GetPromptResult result = client.getPrompt(new McpSchema.GetPromptRequest(name, map(arguments)));
-                return new SeaOperationResult(true, result.messages(), result.meta());
+                return new ZalavaOperationResult(true, result.messages(), result.meta());
             } catch (RuntimeException exception) { return remoteFailure(); }
         }
         @Override public void close() { client.closeGracefully(); }
@@ -94,8 +94,8 @@ final class McpJavaServiceConnector implements McpServiceConnector {
         private static Map<String, Object> map(JsonNode arguments) {
             return arguments == null || arguments.isNull() ? Map.of() : OBJECT_MAPPER.convertValue(arguments, new TypeReference<>() {});
         }
-        private static SeaOperationResult remoteFailure() {
-            return new SeaOperationResult(false, "Remote MCP operation failed", Map.of("category", "remote_mcp_failure"));
+        private static ZalavaOperationResult remoteFailure() {
+            return new ZalavaOperationResult(false, "Remote MCP operation failed", Map.of("category", "remote_mcp_failure"));
         }
     }
 }

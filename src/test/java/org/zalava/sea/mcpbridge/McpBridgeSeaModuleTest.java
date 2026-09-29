@@ -16,10 +16,10 @@ import java.util.Set;
 import org.zalava.InvocationContext;
 import org.zalava.PromptDescriptor;
 import org.zalava.ResourceDescriptor;
-import org.zalava.SeaModule;
-import org.zalava.SeaOperationResult;
-import org.zalava.SeaProvider;
-import org.zalava.SeaToolDescriptor;
+import org.zalava.ZalavaModule;
+import org.zalava.ZalavaOperationResult;
+import org.zalava.ZalavaProvider;
+import org.zalava.ZalavaToolDescriptor;
 import org.zalava.testing.ConfigFixture;
 import org.zalava.testing.ModuleContractKit;
 import org.zalava.testing.ProviderFixture;
@@ -68,7 +68,7 @@ class McpBridgeSeaModuleTest {
     @Test
     @SuppressWarnings("unchecked")
     void exposesTheModuleOwnedDescriptorAndRegistrationConfiguration() {
-        SeaModule module = kit.module();
+        ZalavaModule module = kit.module();
         assertThat(kit.moduleId()).isEqualTo(MODULE_ID);
         assertThat(kit.version()).isEqualTo(System.getProperty("module.version"));
         assertThat(module.descriptor().displayName()).isEqualTo("MCP Bridge");
@@ -116,11 +116,11 @@ class McpBridgeSeaModuleTest {
             assertThat(providers.providers()).extracting(provider -> provider.descriptor().providerId())
                     .containsExactly("github", "local-docs");
 
-            SeaProvider github = providers.requireProvider("github");
+            ZalavaProvider github = providers.requireProvider("github");
             assertThat(github.descriptor().moduleId()).isEqualTo(MODULE_ID);
             assertThat(github.descriptor().providerType()).isEqualTo("mcp-service");
             assertThat(github.descriptor().scope()).containsEntry("transport", "streamable_http");
-            assertThat(github.listTools()).extracting(SeaToolDescriptor::name).containsExactly("search");
+            assertThat(github.listTools()).extracting(ZalavaToolDescriptor::name).containsExactly("search");
             assertThat(github.listResources()).containsExactly(new ResourceDescriptor("docs://readme", "README"));
             assertThat(github.listPrompts()).containsExactly(new PromptDescriptor("summarize", "Summarize content"));
             assertThat(github.callTool("search", arguments(), InvocationContext.system()).success()).isTrue();
@@ -155,7 +155,7 @@ class McpBridgeSeaModuleTest {
                 .secrets(MODULE_ID, reference -> Optional.of("top-secret-value".toCharArray()));
         try (ModuleContractKit injected = injected(connector);
                 ProviderFixture providers = injected.providers(secrets)) {
-            SeaProvider provider = providers.requireProvider("private");
+            ZalavaProvider provider = providers.requireProvider("private");
             assertThat(provider.descriptor().scope()).containsEntry("credentialReferences", "github-token");
             assertThat(provider.descriptor().toString()).doesNotContain("top-secret-value");
             assertThat(provider.listTools().toString()).doesNotContain("top-secret-value");
@@ -174,7 +174,7 @@ class McpBridgeSeaModuleTest {
         Class<?> moduleType = Class.forName(MODULE_CLASS, true, loader);
         Constructor<?> constructor = moduleType.getDeclaredConstructor(connectorType);
         constructor.setAccessible(true);
-        return ModuleContractKit.of((SeaModule) constructor.newInstance(connectorProxy));
+        return ModuleContractKit.of((ZalavaModule) constructor.newInstance(connectorProxy));
     }
 
     private static ConfigFixture configuration(List<Map<String, Object>> registrations) {
@@ -225,13 +225,13 @@ class McpBridgeSeaModuleTest {
         private Object session(String id) {
             return Proxy.newProxyInstance(loader, new Class<?>[] {sessionType},
                     (proxy, method, args) -> switch (method.getName()) {
-                        case "tools" -> List.of(new SeaToolDescriptor("search", "Search", false,
+                        case "tools" -> List.of(new ZalavaToolDescriptor("search", "Search", false,
                                 List.of("remote-mcp"), Map.of()));
                         case "resources" -> List.of(new ResourceDescriptor("docs://readme", "README"));
                         case "prompts" -> List.of(new PromptDescriptor("summarize", "Summarize content"));
-                        case "callTool" -> SeaOperationResult.success("ok");
-                        case "readResource" -> SeaOperationResult.success("resource");
-                        case "resolvePrompt" -> SeaOperationResult.success("prompt");
+                        case "callTool" -> ZalavaOperationResult.success("ok");
+                        case "readResource" -> ZalavaOperationResult.success("resource");
+                        case "resolvePrompt" -> ZalavaOperationResult.success("prompt");
                         case "close" -> {
                             closed.add(id);
                             yield null;
