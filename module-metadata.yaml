@@ -1,14 +1,14 @@
 schemaVersion: 1
 modules:
   - moduleId: zalava-module-mcp-bridge
-    version: 0.1.0-alpha.2
+    version: 0.1.0-alpha.3
     displayName: MCP Bridge
     description: Bridges configured MCP services into SEA providers.
     supportUrl: https://github.com/Zalava/zalava-module-mcp-bridge
     artifact:
       groupId: org.zalava.modules
       artifactId: zalava-module-mcp-bridge
-      version: 0.1.0-alpha.2
+      version: 0.1.0-alpha.3
     source:
       repository: https://github.com/Zalava/zalava-module-mcp-bridge.git
       license: Apache-2.0
