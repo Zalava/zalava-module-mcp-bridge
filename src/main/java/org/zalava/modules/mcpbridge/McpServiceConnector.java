@@ -1,4 +1,4 @@
-package org.zalava.mcpbridge;
+package org.zalava.modules.mcpbridge;
 
 @FunctionalInterface
 interface McpServiceConnector {

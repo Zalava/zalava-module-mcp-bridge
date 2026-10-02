@@ -1,4 +1,4 @@
-package org.zalava.mcpbridge;
+package org.zalava.modules.mcpbridge;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -65,12 +65,20 @@ class McpSessionBoundaryTest {
             session);
     assertThat(provider.capabilities()).isNotNull();
     assertThat(
-            provider.readResource("docs://readme", org.zalava.InvocationContext.system()).success())
+            provider
+                .readResource("docs://readme", org.zalava.api.InvocationContext.system())
+                .success())
         .isTrue();
     assertThat(
             provider
                 .resolvePrompt(
-                    "summarize", json.createObjectNode(), org.zalava.InvocationContext.system())
+                    "summarize",
+                    new tools.jackson.databind.json.JsonMapper()
+                        .convertValue(
+                            json.createObjectNode(),
+                            new tools.jackson.core.type.TypeReference<
+                                java.util.Map<String, Object>>() {}),
+                    org.zalava.api.InvocationContext.system())
                 .success())
         .isTrue();
     session.close();
@@ -129,14 +137,14 @@ class McpSessionBoundaryTest {
               throw new IllegalStateException("unavailable");
             });
     var context =
-        new org.zalava.ProviderFactoryContext(Map.of(), null, Map.of(), Map.of())
+        new org.zalava.api.ProviderFactoryContext(Map.of(), null, Map.of(), Map.of())
             .forFactory("zalava-module-mcp-bridge", "mcp-service-factory");
     assertThat(factory.createProviders(context)).isEmpty();
   }
 
   private static McpServiceSession session(McpSyncClient client) throws Exception {
     var constructor =
-        Class.forName("org.zalava.mcpbridge.McpJavaServiceConnector$Session")
+        Class.forName("org.zalava.modules.mcpbridge.McpJavaServiceConnector$Session")
             .getDeclaredConstructor(McpSyncClient.class);
     constructor.setAccessible(true);
     return (McpServiceSession) constructor.newInstance(client);

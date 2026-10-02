@@ -1,4 +1,4 @@
-package org.zalava.mcpbridge;
+package org.zalava.modules.mcpbridge;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -16,16 +16,16 @@ import java.util.Set;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.zalava.InvocationContext;
-import org.zalava.PromptDescriptor;
-import org.zalava.ResourceDescriptor;
-import org.zalava.ZalavaModule;
-import org.zalava.ZalavaOperationResult;
-import org.zalava.ZalavaProvider;
-import org.zalava.ZalavaToolDescriptor;
-import org.zalava.testing.ConfigFixture;
-import org.zalava.testing.ModuleContractKit;
-import org.zalava.testing.ProviderFixture;
+import org.zalava.api.InvocationContext;
+import org.zalava.api.PromptDescriptor;
+import org.zalava.api.ResourceDescriptor;
+import org.zalava.api.ZalavaModule;
+import org.zalava.api.ZalavaOperationResult;
+import org.zalava.api.ZalavaProvider;
+import org.zalava.api.ZalavaToolDescriptor;
+import org.zalava.api.testing.ConfigFixture;
+import org.zalava.api.testing.ModuleContractKit;
+import org.zalava.api.testing.ProviderFixture;
 import tools.jackson.databind.node.JsonNodeFactory;
 import tools.jackson.databind.node.ObjectNode;
 
@@ -39,9 +39,9 @@ class McpBridgeSeaModuleTest {
 
   private static final String MODULE_ID = "zalava-module-mcp-bridge";
   private static final String FACTORY_ID = "mcp-service-factory";
-  private static final String MODULE_CLASS = "org.zalava.mcpbridge.McpBridgeSeaModule";
-  private static final String CONNECTOR_TYPE = "org.zalava.mcpbridge.McpServiceConnector";
-  private static final String SESSION_TYPE = "org.zalava.mcpbridge.McpServiceSession";
+  private static final String MODULE_CLASS = "org.zalava.modules.mcpbridge.McpBridgeSeaModule";
+  private static final String CONNECTOR_TYPE = "org.zalava.modules.mcpbridge.McpServiceConnector";
+  private static final String SESSION_TYPE = "org.zalava.modules.mcpbridge.McpServiceSession";
 
   private ModuleContractKit kit;
 
@@ -152,7 +152,17 @@ class McpBridgeSeaModuleTest {
           .containsExactly(new ResourceDescriptor("docs://readme", "README"));
       assertThat(github.listPrompts())
           .containsExactly(new PromptDescriptor("summarize", "Summarize content"));
-      assertThat(github.callTool("search", arguments(), InvocationContext.system()).success())
+      assertThat(
+              github
+                  .callTool(
+                      "search",
+                      new tools.jackson.databind.json.JsonMapper()
+                          .convertValue(
+                              arguments(),
+                              new tools.jackson.core.type.TypeReference<
+                                  java.util.Map<String, Object>>() {}),
+                      InvocationContext.system())
+                  .success())
           .isTrue();
 
       assertThat(providers.requireProvider("local-docs").descriptor().scope())

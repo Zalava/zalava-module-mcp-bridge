@@ -39,11 +39,12 @@ if (releaseTag != null && metadataVersion != releaseTag.substring(1)) {
 }
 version = releaseTag != null ? releaseTag.substring(1) : metadataVersion
 
-def moduleApiVersion = providers.gradleProperty('moduleApiVersion').orElse('0.1.0-alpha.2')
+def moduleApiVersion = providers.gradleProperty('moduleApiVersion').orElse('0.1.0-alpha.6')
 def githubPackagesActor = providers.environmentVariable('GITHUB_ACTOR')
 def githubPackagesToken = providers.environmentVariable('ZALAVA_PUBLISH_TOKEN')
 
 dependencies {
+    implementation 'tools.jackson.core:jackson-databind:3.1.4'
     compileOnlyApi "org.zalava:module-api:${moduleApiVersion.get()}"
     implementation 'io.modelcontextprotocol.sdk:mcp:2.0.0'
     testImplementation "org.zalava:module-api:${moduleApiVersion.get()}"
@@ -89,11 +90,11 @@ tasks.named('shadowJar', com.github.jengelman.gradle.plugins.shadow.tasks.Shadow
     duplicatesStrategy = DuplicatesStrategy.INCLUDE
     mergeServiceFiles()
     from(moduleMetadataFile)
-    relocate 'io.modelcontextprotocol', 'org.zalava.mcpbridge.shaded.io.modelcontextprotocol'
-    relocate 'com.networknt', 'org.zalava.mcpbridge.shaded.com.networknt'
+    relocate 'io.modelcontextprotocol', 'org.zalava.modules.mcpbridge.shaded.io.modelcontextprotocol'
+    relocate 'com.networknt', 'org.zalava.modules.mcpbridge.shaded.com.networknt'
     // Jackson 3 is part of the stable module-api SPI boundary (SeaProvider tool
     // arguments), so it must stay unrelocated and resolve from the host.
-    relocate 'io.projectreactor', 'org.zalava.mcpbridge.shaded.io.projectreactor'
+    relocate 'io.projectreactor', 'org.zalava.modules.mcpbridge.shaded.io.projectreactor'
 }
 
 // Validates module-metadata.yaml and embeds it at the root of the installable
@@ -145,7 +146,7 @@ tasks.register('verifyShadedRuntimeArtifact') {
             throw new GradleException('shaded artifact must embed module-metadata.yaml')
         }
         if (contents.matching {
-            include 'org/zalava/mcpbridge/shaded/com/networknt/schema/dialect/Dialects.class'
+            include 'org/zalava/modules/mcpbridge/shaded/com/networknt/schema/dialect/Dialects.class'
         }.isEmpty()) {
             throw new GradleException('shaded artifact does not contain the relocated NetworkNT Dialects class')
         }
@@ -153,7 +154,7 @@ tasks.register('verifyShadedRuntimeArtifact') {
             throw new GradleException('shaded artifact contains the unrelocated NetworkNT Dialects class')
         }
         if (!contents.matching {
-            include 'org/zalava/mcpbridge/shaded/tools/jackson/**'
+            include 'org/zalava/modules/mcpbridge/shaded/tools/jackson/**'
         }.isEmpty()) {
             throw new GradleException('shaded artifact must not relocate the module-api Jackson 3 SPI package')
         }

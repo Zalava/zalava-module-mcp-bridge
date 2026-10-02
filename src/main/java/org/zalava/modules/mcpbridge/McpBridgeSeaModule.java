@@ -1,11 +1,11 @@
-package org.zalava.mcpbridge;
+package org.zalava.modules.mcpbridge;
 
 import java.util.List;
 import java.util.Map;
-import org.zalava.ModuleConfigurationDescriptor;
-import org.zalava.ModuleDescriptor;
-import org.zalava.ProviderFactory;
-import org.zalava.ZalavaModule;
+import org.zalava.api.ModuleConfigurationDescriptor;
+import org.zalava.api.ModuleDescriptor;
+import org.zalava.api.ProviderFactory;
+import org.zalava.api.ZalavaModule;
 
 public final class McpBridgeSeaModule implements ZalavaModule {
   static final String MODULE_ID = "zalava-module-mcp-bridge";

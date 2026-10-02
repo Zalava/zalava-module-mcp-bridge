@@ -1,12 +1,12 @@
-package org.zalava.mcpbridge;
+package org.zalava.modules.mcpbridge;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import org.zalava.ProviderFactory;
-import org.zalava.ProviderFactoryContext;
-import org.zalava.ProviderFactoryDescriptor;
-import org.zalava.ZalavaProvider;
+import org.zalava.api.ProviderFactory;
+import org.zalava.api.ProviderFactoryContext;
+import org.zalava.api.ProviderFactoryDescriptor;
+import org.zalava.api.ZalavaProvider;
 
 final class McpBridgeProviderFactory implements ProviderFactory {
   static final String FACTORY_ID = "mcp-service-factory";

@@ -1,16 +1,15 @@
-package org.zalava.mcpbridge;
+package org.zalava.modules.mcpbridge;
 
 import java.util.List;
 import java.util.Map;
-import org.zalava.InvocationContext;
-import org.zalava.PromptDescriptor;
-import org.zalava.ProviderCapabilities;
-import org.zalava.ProviderDescriptor;
-import org.zalava.ResourceDescriptor;
-import org.zalava.ZalavaOperationResult;
-import org.zalava.ZalavaProvider;
-import org.zalava.ZalavaToolDescriptor;
-import tools.jackson.databind.JsonNode;
+import org.zalava.api.InvocationContext;
+import org.zalava.api.PromptDescriptor;
+import org.zalava.api.ProviderCapabilities;
+import org.zalava.api.ProviderDescriptor;
+import org.zalava.api.ResourceDescriptor;
+import org.zalava.api.ZalavaOperationResult;
+import org.zalava.api.ZalavaProvider;
+import org.zalava.api.ZalavaToolDescriptor;
 
 final class McpBridgeProvider implements ZalavaProvider {
   final McpServiceSession session;
@@ -60,7 +59,9 @@ final class McpBridgeProvider implements ZalavaProvider {
 
   @Override
   public ZalavaOperationResult callTool(
-      String name, JsonNode arguments, InvocationContext context) {
+      String name, java.util.Map<String, Object> argumentValues, InvocationContext context) {
+    tools.jackson.databind.JsonNode arguments =
+        new tools.jackson.databind.json.JsonMapper().valueToTree(argumentValues);
     return session.callTool(name, arguments);
   }
 
@@ -81,7 +82,9 @@ final class McpBridgeProvider implements ZalavaProvider {
 
   @Override
   public ZalavaOperationResult resolvePrompt(
-      String name, JsonNode arguments, InvocationContext context) {
+      String name, java.util.Map<String, Object> argumentValues, InvocationContext context) {
+    tools.jackson.databind.JsonNode arguments =
+        new tools.jackson.databind.json.JsonMapper().valueToTree(argumentValues);
     return session.resolvePrompt(name, arguments);
   }
 }

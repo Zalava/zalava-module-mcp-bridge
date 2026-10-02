@@ -1,4 +1,4 @@
-package org.zalava.mcpbridge;
+package org.zalava.modules.mcpbridge;
 
 import io.modelcontextprotocol.client.McpClient;
 import io.modelcontextprotocol.client.McpSyncClient;
@@ -13,10 +13,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.ServiceLoader;
 import java.util.function.Supplier;
-import org.zalava.PromptDescriptor;
-import org.zalava.ResourceDescriptor;
-import org.zalava.ZalavaOperationResult;
-import org.zalava.ZalavaToolDescriptor;
+import org.zalava.api.PromptDescriptor;
+import org.zalava.api.ResourceDescriptor;
+import org.zalava.api.ZalavaOperationResult;
+import org.zalava.api.ZalavaToolDescriptor;
 import tools.jackson.core.type.TypeReference;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
