@@ -33,13 +33,13 @@ import tools.jackson.databind.node.ObjectNode;
  * Exercises the real built module JAR at the stable {@code module-api} boundary through the
  * released contract kit. The MCP connector seam is driven by an in-process double so no MCP server
  * or external process is needed; host-owned resolution, validation, permissions, approvals,
- * persistence and transport stay covered by SEA.
+ * persistence and transport stay covered by Zalava.
  */
-class McpBridgeSeaModuleTest {
+class McpBridgeZalavaModuleTest {
 
   private static final String MODULE_ID = "zalava-module-mcp-bridge";
   private static final String FACTORY_ID = "mcp-service-factory";
-  private static final String MODULE_CLASS = "org.zalava.modules.mcpbridge.McpBridgeSeaModule";
+  private static final String MODULE_CLASS = "org.zalava.modules.mcpbridge.McpBridgeZalavaModule";
   private static final String CONNECTOR_TYPE = "org.zalava.modules.mcpbridge.McpServiceConnector";
   private static final String SESSION_TYPE = "org.zalava.modules.mcpbridge.McpServiceSession";
 
