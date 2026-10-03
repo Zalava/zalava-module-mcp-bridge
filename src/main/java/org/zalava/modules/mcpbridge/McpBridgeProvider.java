@@ -20,7 +20,7 @@ final class McpBridgeProvider implements ZalavaProvider {
     this.descriptor =
         new ProviderDescriptor(
             registration.id(),
-            McpBridgeSeaModule.MODULE_ID,
+            McpBridgeZalavaModule.MODULE_ID,
             "mcp-service",
             registration.id(),
             "MCP " + registration.transport().name().toLowerCase().replace('_', ' ') + " service",

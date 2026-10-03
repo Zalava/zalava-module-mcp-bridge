@@ -22,7 +22,7 @@ final class McpBridgeProviderFactory implements ProviderFactory {
   public ProviderFactoryDescriptor descriptor() {
     return new ProviderFactoryDescriptor(
         FACTORY_ID,
-        McpBridgeSeaModule.MODULE_ID,
+        McpBridgeZalavaModule.MODULE_ID,
         "mcp-service",
         "MCP service bridge",
         "Creates one provider for each configured remote MCP service.");
@@ -36,7 +36,7 @@ final class McpBridgeProviderFactory implements ProviderFactory {
         providers.add(
             new McpBridgeProvider(registration, version, connector.connect(registration)));
       } catch (RuntimeException ignored) {
-        // A remote outage must not prevent SEA from exposing module configuration.
+        // A remote outage must not prevent Zalava from exposing module configuration.
       }
     }
     return List.copyOf(providers);
@@ -71,7 +71,8 @@ final class McpBridgeProviderFactory implements ProviderFactory {
                     : List.of(),
                 refs));
       } catch (IllegalArgumentException ignored) {
-        // Invalid individual registrations remain recoverable through the SEA-owned configuration
+        // Invalid individual registrations remain recoverable through the Zalava-owned
+        // configuration
         // flow.
       }
     }

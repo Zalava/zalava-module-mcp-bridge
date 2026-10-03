@@ -7,23 +7,23 @@ import org.zalava.api.ModuleDescriptor;
 import org.zalava.api.ProviderFactory;
 import org.zalava.api.ZalavaModule;
 
-public final class McpBridgeSeaModule implements ZalavaModule {
+public final class McpBridgeZalavaModule implements ZalavaModule {
   static final String MODULE_ID = "zalava-module-mcp-bridge";
   private static final String VERSION = ModuleVersion.value();
   private final McpServiceConnector connector;
 
-  public McpBridgeSeaModule() {
+  public McpBridgeZalavaModule() {
     this(new McpJavaServiceConnector());
   }
 
-  McpBridgeSeaModule(McpServiceConnector connector) {
+  McpBridgeZalavaModule(McpServiceConnector connector) {
     this.connector = connector;
   }
 
   @Override
   public ModuleDescriptor descriptor() {
     return new ModuleDescriptor(
-        MODULE_ID, VERSION, "MCP Bridge", "Bridges configured MCP services into SEA providers.");
+        MODULE_ID, VERSION, "MCP Bridge", "Bridges configured MCP services into Zalava providers.");
   }
 
   @Override
