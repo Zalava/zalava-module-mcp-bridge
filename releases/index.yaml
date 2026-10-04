@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "moduleId": "zalava-module-mcp-bridge",
+  "releases": [
+    {
+      "version": "0.1.0-alpha.4",
+      "releaseTag": "v0.1.0-alpha.4",
+      "artifact": {
+        "groupId": "org.zalava.modules",
+        "artifactId": "zalava-module-mcp-bridge",
+        "version": "0.1.0-alpha.4",
+        "sha256": "bb1bb967d082d66569f47fa71a03e8050c81e1e99a80f7923076d87f3dd06d1d",
+        "type": "github-release-assets",
+        "repositoryUri": "https://github.com/Zalava/zalava-module-mcp-bridge",
+        "releaseTag": "v0.1.0-alpha.4",
+        "assetName": "zalava-module-mcp-bridge-0.1.0-alpha.4.jar"
+      },
+      "artifactBundle": false,
+      "source": {
+        "repository": "https://github.com/Zalava/zalava-module-mcp-bridge.git",
+        "revision": "a78dbe433a0c8eec6ca7951aba6ba3f0c847f379",
+        "license": "Apache-2.0"
+      },
+      "compatibility": {
+        "zalavaRuntime": ">=1.0.0 <2.0.0"
+      },
+      "security": {
+        "permissions": [
+          "network-mcp"
+        ]
+      }
+    }
+  ]
+}
